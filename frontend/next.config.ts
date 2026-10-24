@@ -6,7 +6,6 @@ const apiOrigin = process.env.API_ORIGIN || 'http://127.0.0.1:5001';
 const config: NextConfig = {
   poweredByHeader: false,
 
-  // Standard Next.js build directory for Vercel
   distDir: '.next',
 
   turbopack: {
