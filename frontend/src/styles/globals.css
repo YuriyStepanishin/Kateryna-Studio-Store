@@ -1,0 +1,14 @@
+@import './variables.css';
+@import './reset.css';
+*,*::before,*::after{box-sizing:border-box;}
+body{margin:0;font-family:var(--font-main);color:var(--color-text);background:var(--color-bg);line-height:1.6;-webkit-font-smoothing:antialiased;}
+html{scroll-padding-top:140px;scroll-behavior:smooth;}
+button,input,select,textarea{font:inherit;}
+button,input,select,textarea{color:var(--color-text);}
+input,select,textarea{background:var(--color-surface);accent-color:var(--color-primary);}
+input::placeholder,textarea::placeholder{color:var(--color-muted);opacity:1;}
+button:disabled{opacity:.55;cursor:not-allowed;}
+button,a,input,select,textarea{touch-action:manipulation;}
+:focus-visible{outline:3px solid var(--color-primary);outline-offset:4px;}
+::selection{background:var(--color-primary);color:var(--color-on-primary);}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}*,*::before,*::after{animation:none!important;transition:none!important;}}

@@ -1,0 +1,25 @@
+import {validateDelivery} from '../validators/delivery.js';
+import {randomUUID} from 'node:crypto';
+// The server re-reads prices and locks inventory inside the same transaction.
+export async function createOrder(pool,payload) {
+ const customer=payload?.payment;
+ if(!customer || !['fullName','phone','email','city','address'].every(key=>typeof customer[key]==='string'&&customer[key].trim()&&customer[key].length<=(key==='address'?300:120))) throw Object.assign(new Error('Заповніть контактні дані й адресу.'),{status:400});
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email)||!/^\+?[\d\s()\-]{10,25}$/.test(customer.phone)||customer.phone.replace(/\D/g,'').length<10)throw Object.assign(new Error('Перевірте email і телефон.'),{status:400});
+ if(customer.method!=='on_confirmation')throw Object.assign(new Error('Онлайн-оплата ще не підключена.'),{status:400});
+ if(!Array.isArray(payload.items)||!payload.items.length||payload.items.length>100)throw Object.assign(new Error('Перевірте кошик.'),{status:400});
+ const ids=new Set();
+ for(const item of payload.items){if(!item||typeof item.productId!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(item.productId)||!Number.isInteger(item.qty)||item.qty<1||item.qty>99||ids.has(item.productId))throw Object.assign(new Error('Некоректний товар або кількість.'),{status:400});ids.add(item.productId);}
+ const delivery=validateDelivery(customer);
+ const client=await pool.connect();
+ try {
+  await client.query('BEGIN');
+  const {rows}=await client.query('SELECT id,price,stock,is_active FROM products WHERE id=ANY($1::uuid[]) AND EXISTS (SELECT 1 FROM categories WHERE categories.id=products.category_id AND categories.is_active) ORDER BY id FOR UPDATE',[[...ids]]);
+  const lines=payload.items.map(item=>{const p=rows.find(row=>row.id===item.productId);if(!p||!p.is_active||p.stock<item.qty)throw Object.assign(new Error('Товар недоступний або недостатньо залишку.'),{status:409});return {...item,price:p.price,cents:Math.round(Number(p.price)*100)};});
+  const totalCents=lines.reduce((sum,line)=>sum+line.cents*line.qty,0);
+  const orderId=randomUUID();
+  await client.query(`INSERT INTO orders(id,status,total,delivery_method,payment_method,customer_name,customer_phone,customer_email,city,address) VALUES($1,'NEW',$2,$8,'on_confirmation',$3,$4,$5,$6,$7)`,[orderId,(totalCents/100).toFixed(2),customer.fullName.trim(),customer.phone.trim(),customer.email.trim(),customer.city.trim(),customer.address.trim(),delivery.method]);
+  for(const line of lines){await client.query('INSERT INTO order_items(order_id,product_id,price,quantity) VALUES($1,$2,$3,$4)',[orderId,line.productId,line.price,line.qty]);await client.query('UPDATE products SET stock=stock-$1 WHERE id=$2',[line.qty,line.productId]);}
+  await client.query('COMMIT');
+  return {orderId,status:'NEW',amount:totalCents/100};
+ } catch(error){await client.query('ROLLBACK');throw error;} finally{client.release();}
+}

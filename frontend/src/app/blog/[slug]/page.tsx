@@ -1,0 +1,19 @@
+import type {Metadata} from 'next';
+import Link from 'next/link';
+import {notFound} from 'next/navigation';
+import {cache} from 'react';
+import {getArticle} from '@/services/articles.server';
+import styles from '../Blog.module.css';
+const loadArticle=cache(getArticle);
+type Props={params:Promise<{slug:string}>};
+export async function generateMetadata({params}:Props):Promise<Metadata>{
+ const article=await loadArticle((await params).slug);if(!article)return {title:'Статтю не знайдено',robots:{index:false}};
+ return {title:article.seoTitle,description:article.seoDescription,authors:[{name:article.author}],openGraph:{title:article.seoTitle,description:article.seoDescription,type:'article',publishedTime:article.date,authors:[article.author],locale:'uk_UA'},twitter:{card:'summary',title:article.seoTitle,description:article.seoDescription}};
+}
+export default async function ArticlePage({params}:Props){
+ const article=await loadArticle((await params).slug);if(!article)notFound();
+ return <main className={styles.page}><Link href="/blog" className={styles.read}>← Усі статті</Link><article className={styles.article}><header><p className={styles.eyebrow}>{article.category}</p><h1>{article.title}</h1><p className={styles.intro}>{article.excerpt}</p><p className={styles.meta}>{article.author} · <time dateTime={article.date}>{new Date(article.date+'T00:00:00Z').toLocaleDateString('uk-UA',{timeZone:'UTC'})}</time></p></header>
+ <div className={styles.body}>{article.body.split(/\n\s*\n/).map((block,index)=>block.startsWith('## ')?<h2 key={index}>{block.slice(3)}</h2>:<p key={index}>{block}</p>)}</div>
+ <footer className={styles.sources}><h2>Джерела</h2><p>Оригінальний редакційний матеріал omee store. Наведені джерела використано для перевірки рекомендацій.</p><ul>{article.sources.filter(s=>{try{return new URL(s.url).protocol==='https:';}catch{return false;}}).map(s=><li key={s.url}><a href={s.url} target="_blank" rel="noopener noreferrer">{s.title}</a></li>)}</ul></footer>
+ </article><Link href="/#catalog" className={styles.read}>Знайти засоби для догляду →</Link></main>;
+}

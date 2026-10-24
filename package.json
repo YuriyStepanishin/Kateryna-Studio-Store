@@ -1,25 +1,32 @@
 {
-  "name": "vanilla-app-template",
+  "name": "omee",
   "private": true,
   "version": "1.0.0",
-  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build --base=/Kateryna-Studio-Store/",
-    "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "dev": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "start": "npm --prefix frontend start",
+    "typecheck": "npm --prefix frontend run typecheck",
+    "frontend:dev": "npm --prefix frontend run dev",
+    "backend:dev": "npm --prefix backend run dev",
+    "backend:start": "npm --prefix backend start",
+    "db:migrate": "npm --prefix backend run db:migrate",
+    "test": "npm --prefix backend test",
+    "admin:promote": "npm --prefix backend run admin:promote --",
+    "cloudinary:check": "npm --prefix backend run cloudinary:check",
+    "cloudinary:migrate": "npm --prefix backend run cloudinary:migrate --",
+    "cloudinary:organize": "npm --prefix backend run cloudinary:organize --",
+    "cloudinary:repair": "npm --prefix backend run cloudinary:repair --",
+    "catalog:groups": "npm --prefix backend run catalog:groups --",
+    "cloudinary:quality": "npm --prefix backend run cloudinary:quality --",
+    "catalog:categories": "npm --prefix backend run catalog:categories",
+    "catalog:publish": "npm --prefix backend run catalog:publish",
+    "catalog:stock": "npm --prefix backend run catalog:stock",
+    "catalog:prepare": "npm --prefix backend run catalog:prepare",
+    "blog:publish": "npm --prefix backend run blog:publish --",
+    "media:import": "npm --prefix backend run media:import --"
   },
-  "devDependencies": {
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2",
-    "@vitejs/plugin-react": "^5.1.0",
-    "typescript": "^5.9.3",
-    "vite": "^5.4.6"
-  },
-  "author": "Alexander Repeta <alexander.repeta@gmail.com>",
-  "license": "ISC",
-  "dependencies": {
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+  "engines": {
+    "node": ">=22"
   }
 }

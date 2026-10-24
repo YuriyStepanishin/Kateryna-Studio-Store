@@ -1,0 +1,9 @@
+.fields{grid-column:1/-1;display:grid;gap:12px;min-width:0;margin:0;padding:16px;border:1px solid var(--color-border);border-radius:14px}
+.fields legend{padding:0 8px;font-weight:700}
+.fields label{display:grid;gap:5px;min-width:0}
+.fields input,.fields select{width:100%;min-width:0;max-width:100%}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.help{font-size:.85rem;line-height:1.45;margin:0;opacity:.8}
+.toggle{justify-self:start;font-size:.85rem;text-decoration:underline;background:transparent;border:0;color:inherit;cursor:pointer;padding:4px 0}
+@media(max-width:1199px) and (min-width:768px){.fields{padding:14px}}
+@media(max-width:767px){.fields{padding:12px}.row{grid-template-columns:1fr}}

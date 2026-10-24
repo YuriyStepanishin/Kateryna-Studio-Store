@@ -1,0 +1,6 @@
+'use client';
+import Link from 'next/link';
+import type {ReactNode} from 'react';
+import {useAuthStore} from '@/store/auth';
+import styles from './Admin.module.css';
+export default function AdminLayout({children}:{children:ReactNode}){const {user,loaded,error}=useAuthStore();if(!loaded)return <main className={styles.page}><p role="status">Перевіряємо доступ…</p></main>;if(!user)return <main className={styles.page}><h1 className={styles.title}>Керування магазином</h1><p>{error||'Спочатку увійдіть до акаунта адміністратора.'}</p><Link href="/login">Увійти</Link></main>;if(user.role!=='ADMIN')return <main className={styles.page}><h1 className={styles.title}>Потрібен доступ адміністратора</h1><p>Поточний акаунт має роль {user.role}. Керування каталогом доступне лише ADMIN.</p><Link href="/profile">Повернутися в кабінет</Link></main>;return <main className={styles.page}><h1 className={styles.title}>Керування магазином</h1><nav className={styles.nav}><Link href="/admin/categories">Категорії</Link><Link href="/admin/products">Товари</Link><Link href="/admin/content">Контент та акції</Link><Link href="/admin/articles">Статті</Link><Link href="/#catalog">Переглянути магазин</Link></nav>{children}</main>;}

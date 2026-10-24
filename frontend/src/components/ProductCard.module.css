@@ -1,0 +1,20 @@
+.card{min-width:0;padding:10px;display:flex;flex-direction:column;gap:8px;border:1px solid var(--color-border);border-radius:12px;background:var(--color-surface);cursor:pointer;overflow-wrap:anywhere;transition:box-shadow var(--transition);}
+.card:hover{box-shadow:var(--shadow-soft);}
+.photoButton{position:relative;padding:0;border:0;border-radius:12px;background:#fff;overflow:hidden;}
+.photo{width:100%;aspect-ratio:1/1;object-fit:contain;padding:10px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#70665e;}
+.openHint{position:absolute;bottom:10px;right:10px;padding:5px 10px;border:1px solid #dedecd;border-radius:999px;background:#faf9f3;color:#4c352e;font-size:11px;}
+.brand{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:var(--color-muted);}
+.title{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:41px;padding:0;text-align:left;font-size:14px;line-height:1.45;font-weight:600;color:var(--color-text);background:none;border:0;}
+.title:hover{color:var(--color-primary);}
+.description{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;font-size:13px;line-height:1.6;color:var(--color-muted);}
+.badge{align-self:start;border-radius:999px;padding:3px 10px;background:var(--color-primary-soft);font-size:11px;}
+.bottom{margin-top:auto;display:grid;gap:8px;padding-top:6px;}
+.price{font-size:18px;font-weight:600;line-height:1.4;}
+.price del{display:block;font-size:13px;font-weight:400;color:var(--color-muted);}
+.cart{display:flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:11px 16px;border:0;border-radius:10px;background:var(--color-primary);color:var(--color-on-primary);font-weight:600;font-size:13px;}
+.cart:hover:not(:disabled){background:var(--color-primary-hover);}
+.cart svg{flex-shrink:0;}
+@media(min-width:768px) and (max-width:1199px){.card{padding:12px;}}
+@media(max-width:767px){.card{padding:10px;gap:8px;}.photo{padding:8px;}.title{font-size:14px;}.price{font-size:17px;}.cart{font-size:12px;padding:10px 6px;gap:5px;}.cart svg{width:16px;}.brand{letter-spacing:0;}}
+
+@media(min-width:1200px){.bottom{grid-template-columns:minmax(0,1fr) auto;align-items:center;}.cart{padding:10px;font-size:12px;}.openHint{font-size:10px;bottom:6px;right:6px;}}
