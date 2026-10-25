@@ -1,4 +1,5 @@
 import { http } from './http';
+import { uploadToCloudinary } from './cloudinaryUpload';
 export interface Category {
   id: string;
   name: string;
@@ -49,14 +50,7 @@ export const saveProduct = (data: ProductInput, id?: string) =>
   id ? http.put('/products/' + id, data) : http.post('/products', data);
 export const archiveProduct = (id: string) => http.delete('/products/' + id);
 export async function uploadPhoto(file: File) {
-  const data = new FormData();
-  data.append('image', file);
-  return (
-    await http.post<{ imageUrl: string }>('/upload', data, {
-      headers: { 'Content-Type': undefined },
-      timeout: 60000,
-    })
-  ).data.imageUrl;
+  return uploadToCloudinary(file, 'image');
 }
 
 export const saveProductLine = (

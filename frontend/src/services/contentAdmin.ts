@@ -1,4 +1,5 @@
 import { http } from './http';
+import { uploadToCloudinary } from './cloudinaryUpload';
 export interface SiteInfo {
   heading: string;
   description: string;
@@ -52,12 +53,5 @@ export const saveContent = (
     : http.post('/admin/content/' + kind, body);
 };
 export async function uploadVideo(file: File) {
-  const data = new FormData();
-  data.append('video', file);
-  return (
-    await http.post<{ url: string }>('/upload/video', data, {
-      headers: { 'Content-Type': undefined },
-      timeout: 120000,
-    })
-  ).data.url;
+  return uploadToCloudinary(file, 'video');
 }

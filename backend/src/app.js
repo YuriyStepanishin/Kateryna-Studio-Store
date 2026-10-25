@@ -14,7 +14,7 @@ import {articleRoutes} from './routes/articles.js';
 import {errorHandler,notFound} from './middleware/errors.js';
 export function createApp(config=readEnv()) {
  const app=express();app.disable('x-powered-by');app.use(helmet());
- app.use(cors({origin(origin,callback){if(!origin||config.origins.includes(origin))return callback(null,true);callback(Object.assign(new Error('Origin is not allowed'),{status:403}));},credentials:true}));
+ app.use(cors({origin(origin,callback){callback(null,!origin||config.origins.includes(origin));},credentials:true}));
  app.use(express.json({limit:'32kb'}));
  app.get('/api/health',async(req,res)=>{if(config.mode==='postgres'){try{await getPool(config.databaseUrl).query('SELECT 1');}catch{return res.status(503).json({status:'unavailable',database:'unavailable'});}}res.json({status:'ok',mode:config.mode});});
  app.use('/api/auth',authRoutes(config));

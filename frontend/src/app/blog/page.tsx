@@ -2,6 +2,7 @@ import type {Metadata} from 'next';
 import Link from 'next/link';
 import {getArticles} from '@/services/articles.server';
 import styles from './Blog.module.css';
+export const dynamic='force-dynamic';
 export const metadata:Metadata={title:'Статті про догляд за волоссям',description:'Практичні україномовні статті omee store про домашній догляд, маски, термозахист, фарбоване та кучеряве волосся.'};
 export default async function Blog(){
  const articles=await getArticles();

@@ -15,7 +15,7 @@ package.json команди запуску з кореня
 
 Підготовлений каркас етапу 1: Next.js 16 App Router, TypeScript, CSS Modules, layout із Header/Footer/Container; TanStack Query + Axios; кошик Zustand із відновленням після hydration. Express 5 API має окремі routes/controllers/models/services/middleware/config/validators. PostgreSQL pool налаштований для Neon. Міграція створює таблиці з ТЗ та refresh_tokens для майбутньої авторизації.
 
-Залежності встановлені користувачем. Production-збірка Next.js 16.4.3 та 4 Node-тести проходять. Підключення до Neon із середовища розробки поки блокує ENOTFOUND; міграція не виконана.
+Backend і frontend мають окремі Node.js/TypeScript перевірки. У локальному середовищі доступні Neon health check і каталог через API; міграції залишаються ручними та не запускаються під час build/deploy.
 
 ## Встановлення і запуск (Node.js 22+)
 
@@ -29,21 +29,15 @@ Copy-Item frontend/.env.example frontend/.env.local
 Copy-Item backend/.env.example backend/.env
 ```
 
-Термінал 1:
-
-```powershell
-npm run backend:start
-```
-
-Термінал 2:
+Запуск магазину:
 
 ```powershell
 npm run dev
 ```
 
-Команди можна виконувати з кореня: `npm run dev`, `npm run backend:start`, `npm run db:migrate`. У самих папках працюють стандартні `npm run dev` та `npm start`.
+`npm run dev` запускає Next.js; його API Route викликає Express handler в тому ж процесі. Окремий `npm run backend:start` залишений для прямого локального запуску й ручних перевірок API, але для звичайної розробки разом із Next запускати обидва процеси не потрібно. Команди можна виконувати з кореня; у папках також працюють стандартні `npm run dev` та `npm start`.
 
-Магазин: http://localhost:5173. Next проксіює `/api/*` на `API_ORIGIN` (локально http://127.0.0.1:5001).
+Магазин: http://localhost:5173. Next.js API Route передає `/api/*` на Express без окремого API-домену. Локально `API_ORIGIN` використовується лише серверним завантаженням статей і за замовчуванням вказує на Next.js `127.0.0.1:5173`; щоб тестувати окремий процес Express, задайте `http://127.0.0.1:5001`.
 
 ## Режими даних
 
@@ -71,9 +65,18 @@ npm run build
 
 ## Розміщення
 
-Vercel: Framework Next.js, Root Directory `frontend`; `npm run build`. `API_ORIGIN` — HTTPS адреса бекенду Render без `/api` у кінці. Не встановлювати Output Directory у `dist` і не використовувати старий GitHub Pages workflow.
+Vercel: Framework Next.js, Root Directory `frontend`, Node.js 22. Увімкніть `Include source files outside of the Root Directory`, щоб Next міг зібрати наявний Express-код із `backend/`. Install Command: `npm ci --prefix ../backend && npm ci`; Build Command: `npm run build`; Output Directory залиште автоматичним для Next.js. Не додавайте catch-all rewrite: Next API Route `src/pages/api/[...path].js` передає всі `/api/*` Express handler-у, решту URL обробляє App Router.
 
-Render: Root Directory `backend`; Build `npm install`; Start `npm start`; `NODE_ENV=production`, `STORE_MODE=postgres`, `HOST=0.0.0.0`, `DATABASE_URL` окремої Neon БД, `CORS_ORIGINS` — дозволені адреси фронтенду. Порт надає Render. Секрети JWT/Cloudinary/LiqPay залишаються лише на бекенді.
+У Vercel Environment Variables задайте `STORE_MODE=postgres`, Neon `DATABASE_URL` із `sslmode=require`, два різні JWT secrets довжиною від 32 символів, `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY` і `CLOUDINARY_API_SECRET`. Для доставки додайте `NOVA_POSHTA_API_KEY` та/або `UKRPOSHTA_BEARER` за потреби. `API_ORIGIN` у production не потрібний: серверні запити статей використовують deployment `VERCEL_URL`. Не задавайте secrets як `NEXT_PUBLIC_*`.
+
+У Cloudinary Console вручну створіть два **підписані** Upload Presets:
+
+1. `omee_signed_images`: signed preset; формати `jpg`, `jpeg`, `png`, `webp`; max file size `5,242,880` bytes; папка `omee/images`.
+2. `omee_signed_videos`: signed preset; формати `mp4`, `webm`; max file size `26,214,400` bytes (25 MiB); папка `omee/videos`.
+
+Frontend звіряє preset, папку, тип ресурсу й дозволені формати з підписаною відповіддю backend, а браузер завантажує файл напряму до Cloudinary. Перевірка розміру до видачі підпису спирається на заявлений клієнтом розмір і не є обмеженням самого завантаження. Після upload backend перевіряє Cloudinary resource type, фактичний формат і байти, папку, підписаний public ID та HTTPS URL перед тим, як дозволити збереження посилання. Невідповідність відхиляється, але файл, уже завантажений напряму, автоматично не видаляється. Фактичні обмеження під час приймання файлу залежать від Cloudinary Console: перевірте, що обидва presets signed і мають саме вказані папки, формати та ліміти. Ці налаштування не можна підтвердити лише кодом. `CLOUDINARY_API_SECRET` залишається лише на сервері. Наявні URL із `kateryna-studio/images` та `omee/images` перевіряються за Cloudinary ресурсом і не переносяться чи перейменовуються. Не налаштовуйте окремий Render service та не створюйте Vercel rewrites для `/api`.
+
+Preview deployments мають використовувати окрему Neon гілку/БД або сумісні production credentials із належною обережністю. Vercel не запускає міграції автоматично: застосуйте чинні SQL-міграції до Neon вручну перед переключенням `STORE_MODE=postgres`. Цей код не змінює схему даних.
 
 ## Авторизація
 

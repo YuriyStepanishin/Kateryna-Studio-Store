@@ -4,6 +4,7 @@ import {notFound} from 'next/navigation';
 import {cache} from 'react';
 import {getArticle} from '@/services/articles.server';
 import styles from '../Blog.module.css';
+export const dynamic='force-dynamic';
 const loadArticle=cache(getArticle);
 type Props={params:Promise<{slug:string}>};
 export async function generateMetadata({params}:Props):Promise<Metadata>{

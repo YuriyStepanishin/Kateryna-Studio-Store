@@ -1,24 +1,19 @@
 import { fileURLToPath } from 'node:url';
 import type { NextConfig } from 'next';
 
-const apiOrigin = process.env.API_ORIGIN || 'http://127.0.0.1:5001';
+const projectRoot = fileURLToPath(new URL('../', import.meta.url));
 
 const config: NextConfig = {
   poweredByHeader: false,
 
   distDir: '.next',
-
-  turbopack: {
-    root: fileURLToPath(new URL('.', import.meta.url)),
+  outputFileTracingRoot: projectRoot,
+  outputFileTracingIncludes: {
+    '/api/*': ['../backend/migrations/*.sql'],
   },
 
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: apiOrigin.replace(/\/$/, '') + '/api/:path*',
-      },
-    ];
+  turbopack: {
+    root: projectRoot,
   },
 };
 
