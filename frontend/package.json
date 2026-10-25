@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start --port 5173",
     "typecheck": "tsc --noEmit",
-    "test:pagination": "node --experimental-strip-types --test pagination.test.mjs"
+    "test:pagination": "node --experimental-strip-types --test tests/pagination.test.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
@@ -19,18 +19,17 @@
   "author": "Alexander Repeta <alexander.repeta@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "next": "^16.0.0",
+    "@hookform/resolvers": "^5.2.0",
     "@tanstack/react-query": "^5.90.0",
     "axios": "^1.12.0",
-    "zustand": "^5.0.0",
+    "next": "^16.0.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "react-hook-form": "^7.62.0",
-    "zod": "^4.1.0",
-    "@hookform/resolvers": "^5.2.0",
+    "react-paginate": "^8.3.0",
     "swiper": "^12.0.0",
-    "next-themes": "^0.4.6",
-    "react-paginate": "^8.3.0"
+    "zod": "^4.1.0",
+    "zustand": "^5.0.0"
   },
   "engines": {
     "node": ">=22"

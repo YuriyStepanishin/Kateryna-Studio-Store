@@ -61,29 +61,11 @@ export const saveProductLine = (
 export const deleteProduct = (id: string) =>
   http.delete('/admin/products/' + id);
 
-export const publishProducts = async () =>
+export const classifyCatalogProducts = async () =>
   (
     await http.post<{
-      published: number;
-      pricesSet: number;
-      total: number;
-      without_stock: number;
-      categorySetup: { created: number; existing: number; assigned: number };
-    }>('/admin/products/publish', {}, { timeout: 60000 })
-  ).data;
-
-export const fillTestStock = async () =>
-  (
-    await http.post<{ updated: number; quantity: number }>(
-      '/admin/products/test-stock'
-    )
-  ).data;
-
-export const prepareCatalogForCart = async () =>
-  (
-    await http.post<{
+      categories: { created: number; existing: number; assigned: number; unassigned: number };
       classified: number;
-      stocked: number;
       review: Array<{ id: string; name: string }>;
-    }>('/admin/products/prepare', {}, { timeout: 60000 })
+    }>('/admin/products/classify', {}, { timeout: 60000 })
   ).data;

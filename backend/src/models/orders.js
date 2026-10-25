@@ -14,7 +14,7 @@ export async function createOrder(pool,payload) {
  try {
   await client.query('BEGIN');
   const {rows}=await client.query('SELECT id,price,stock,is_active FROM products WHERE id=ANY($1::uuid[]) AND EXISTS (SELECT 1 FROM categories WHERE categories.id=products.category_id AND categories.is_active) ORDER BY id FOR UPDATE',[[...ids]]);
-  const lines=payload.items.map(item=>{const p=rows.find(row=>row.id===item.productId);if(!p||!p.is_active||p.stock<item.qty)throw Object.assign(new Error('Товар недоступний або недостатньо залишку.'),{status:409});return {...item,price:p.price,cents:Math.round(Number(p.price)*100)};});
+  const lines=payload.items.map(item=>{const p=rows.find(row=>row.id===item.productId);if(!p||!p.is_active||p.stock<item.qty||!Number.isFinite(Number(p.price))||Number(p.price)<=0)throw Object.assign(new Error('Товар недоступний або недостатньо залишку.'),{status:409});return {...item,price:p.price,cents:Math.round(Number(p.price)*100)};});
   const totalCents=lines.reduce((sum,line)=>sum+line.cents*line.qty,0);
   const orderId=randomUUID();
   await client.query(`INSERT INTO orders(id,status,total,delivery_method,payment_method,customer_name,customer_phone,customer_email,city,address) VALUES($1,'NEW',$2,$8,'on_confirmation',$3,$4,$5,$6,$7)`,[orderId,(totalCents/100).toFixed(2),customer.fullName.trim(),customer.phone.trim(),customer.email.trim(),customer.city.trim(),customer.address.trim(),delivery.method]);

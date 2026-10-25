@@ -22,10 +22,6 @@ export async function prepareCatalog(pool){
    const assignment={sourceGroups:combined,sourceCategoryAssignment:{basis:inferred.review?'review':inferred.basis,review:inferred.review}};
    const updated=await client.query("UPDATE products SET category_id=$1,characteristics=COALESCE(characteristics,'{}'::jsonb)||$2::jsonb WHERE id=$3 AND category_id=$4",[categoryIds.get(group),JSON.stringify(assignment),product.id,product.category_id]);classified+=updated.rowCount;
   }
-  const priced=await client.query('UPDATE products SET price=2000,old_price=CASE WHEN old_price<2000 THEN NULL ELSE old_price END WHERE price IS NULL OR price<=0');
-  const stocked=await client.query('UPDATE products SET stock=10 WHERE stock=0');
-  const published=await client.query('UPDATE products SET is_active=true WHERE NOT is_active');
-  await client.query('UPDATE categories SET is_active=true WHERE EXISTS(SELECT 1 FROM products p WHERE p.category_id=categories.id)');
-  await client.query('COMMIT');return {categories,classified,review,pricesSet:priced.rowCount,stocked:stocked.rowCount,published:published.rowCount};
+  await client.query('COMMIT');return {categories,classified,review};
  }catch(error){await client.query('ROLLBACK');throw error;}finally{client.release();}
 }

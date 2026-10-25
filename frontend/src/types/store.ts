@@ -86,5 +86,8 @@ export interface CheckoutPayload {
         productId: string;
         qty: number;
     }>;
-    payment: PaymentPayload;
+    payment: Omit<PaymentPayload, 'deliveryCarrier' | 'deliveryType'> & {
+        deliveryCarrier?: DeliveryCarrier | 'pickup';
+        deliveryType?: DeliveryType | 'pickup';
+    };
 }

@@ -4,6 +4,9 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import type { CartItem } from '@/types/store';
 interface CartState {
     items: CartItem[];
+    isOpen: boolean;
+    openCart: () => void;
+    closeCart: () => void;
     addToCart: (id: string) => void;
     removeFromCart: (id: string) => void;
     changeQty: (id: string, qty: number) => void;
@@ -12,6 +15,9 @@ interface CartState {
 const safeQty = (qty: number) => Number.isFinite(qty) ? Math.min(99, Math.max(1, Math.floor(qty))) : 1;
 export const useCartStore = create<CartState>()(persist((set) => ({
     items: [],
+    isOpen: false,
+    openCart: () => set({ isOpen: true }),
+    closeCart: () => set({ isOpen: false }),
     addToCart: (productId) => set(state => ({ items: state.items.some(i => i.productId === productId) ? state.items.map(i => i.productId === productId ? { ...i, qty: safeQty(i.qty + 1) } : i) : [...state.items, { productId, qty: 1 }] })),
     removeFromCart: (id) => set(state => ({ items: state.items.filter(i => i.productId !== id) })),
     changeQty: (id, qty) => set(state => ({ items: state.items.map(i => i.productId === id ? { ...i, qty: safeQty(qty) } : i) })),

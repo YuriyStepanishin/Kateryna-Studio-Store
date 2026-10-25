@@ -1,0 +1,311 @@
+.footer {
+  --container-width: 1200px;
+  margin-top: 24px;
+  padding-bottom: 16px;
+  max-height: 600px;
+  overflow-y: auto;
+  background: var(--color-footer);
+  color: var(--color-footer-text);
+  border-top: 3px solid var(--color-brand-lime);
+}
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 22px 0;
+  border-bottom: 1px solid rgb(246 242 230 / 16%);
+}
+.intro h2 {
+  margin: 0;
+  font-size: clamp(20px, 2vw, 26px);
+  font-weight: 500;
+  line-height: 1.25;
+}
+.intro p {
+  margin-top: 6px;
+  font-size: 14px;
+  color: rgb(246 242 230 / 70%);
+}
+.consult {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 44px;
+  padding: 10px 20px;
+  border: 1px solid var(--color-brand-lime);
+  border-radius: 999px;
+  background: var(--color-brand-lime);
+  color: var(--color-brand-chocolate);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.consult:hover {
+  background: var(--color-footer-text);
+  border-color: var(--color-footer-text);
+}
+.columns {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.2fr) minmax(0, 0.75fr) minmax(0, 0.85fr)
+    minmax(0, 1.2fr);
+  gap: 28px;
+  padding: 28px 0;
+}
+.columns > * {
+  min-width: 0;
+}
+.logo {
+  display: inline-block;
+  --brand-logo-width: 160px;
+  max-width: 100%;
+  color: var(--color-brand-lime);
+  margin-bottom: 12px;
+}
+.brand > p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgb(246 242 230 / 72%);
+}
+.columns h2 {
+  margin: 4px 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  line-height: 1.5;
+}
+.links ul {
+  display: grid;
+  gap: 2px;
+}
+.links a {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 0;
+  min-height: 34px;
+  font-size: 14px;
+  color: rgb(246 242 230 / 72%);
+}
+.mobileToggle {
+  display: none;
+}
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+.socials a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgb(246 242 230 / 24%);
+  border-radius: 10px;
+}
+.socials a:hover {
+  background: var(--color-brand-lime);
+  border-color: var(--color-brand-lime);
+  color: var(--color-brand-chocolate);
+}
+.studio {
+  margin-bottom: 8px;
+  font-size: 11px;
+  letter-spacing: 0.7px;
+  line-height: 1.6;
+}
+.contacts {
+  scroll-margin-top: 24px;
+}
+.contacts address {
+  display: grid;
+  gap: 2px;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+  color: rgb(246 242 230 / 72%);
+}
+.contacts address a {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+}
+.contacts .phone {
+  font-size: 16px;
+  color: var(--color-footer-text);
+}
+.mapBanner {
+  margin-top: 12px;
+  overflow: hidden;
+  border: 2px solid var(--color-brand-lime);
+  border-radius: 20px;
+  background: var(--color-footer);
+}
+.mapFrame {
+  display: block;
+  width: 100%;
+  height: 96px;
+  border: 0;
+}
+.mapLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 36px;
+  padding: 6px 12px;
+  background: var(--color-brand-lime);
+  color: var(--color-brand-chocolate);
+  font-size: 12px;
+  font-weight: 600;
+}
+.contacts a.mapLink:hover {
+  background: var(--color-footer-text);
+  color: var(--color-brand-chocolate);
+  text-decoration: none;
+}
+.messageLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 36px;
+  margin-top: 4px;
+  color: var(--color-brand-lime);
+  font-size: 13px;
+}
+.links a:hover,
+.contacts address a:hover,
+.messageLink:hover,
+.bottom a:hover {
+  color: var(--color-brand-lime);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.footer a:focus-visible,
+.mobileToggle:focus-visible {
+  outline: 2px solid var(--color-brand-lime);
+  outline-offset: 5px;
+}
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgb(246 242 230 / 16%);
+  font-size: 12px;
+  color: rgb(246 242 230 / 65%);
+}
+.bottom a {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 44px;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  .columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 32px;
+    padding: 24px 0;
+  }
+  .mapBanner {
+    max-width: 420px;
+  }
+}
+@media (max-width: 767px) {
+  .top {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    padding: 20px 0;
+  }
+  .consult {
+    align-self: flex-start;
+  }
+  .columns {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding: 24px 0 16px;
+  }
+  .brand {
+    order: 0;
+    padding-bottom: 20px;
+  }
+  .contacts {
+    order: 1;
+    padding-bottom: 16px;
+  }
+  .links {
+    order: 2;
+    border-top: 1px solid rgb(246 242 230 / 16%);
+  }
+  .logo {
+    --brand-logo-width: 148px;
+    margin-bottom: 12px;
+  }
+  .columns h2 {
+    margin: 0 0 12px;
+  }
+  .links h2 {
+    margin: 0;
+  }
+  .desktopTitle {
+    display: none;
+  }
+  .mobileToggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    text-transform: inherit;
+    letter-spacing: inherit;
+    cursor: pointer;
+  }
+  .mobileToggle span {
+    font-size: 20px;
+    color: var(--color-brand-lime);
+  }
+  .links .collapsed {
+    display: none;
+  }
+  .links .expanded {
+    display: grid;
+    padding-bottom: 16px;
+  }
+  .socials {
+    margin-top: 12px;
+  }
+  .mapBanner {
+    max-width: 300px;
+  }
+  .mapLink {
+    min-height: 44px;
+  }
+  .links a,
+  .contacts address a,
+  .messageLink {
+    min-height: 44px;
+  }
+  .bottom {
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .signature {
+    flex-basis: 100%;
+    order: 2;
+    line-height: 1.7;
+  }
+}

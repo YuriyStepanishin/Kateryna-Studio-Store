@@ -20,8 +20,6 @@
     "catalog:groups": "npm --prefix backend run catalog:groups --",
     "cloudinary:quality": "npm --prefix backend run cloudinary:quality --",
     "catalog:categories": "npm --prefix backend run catalog:categories",
-    "catalog:publish": "npm --prefix backend run catalog:publish",
-    "catalog:stock": "npm --prefix backend run catalog:stock",
     "catalog:prepare": "npm --prefix backend run catalog:prepare",
     "blog:publish": "npm --prefix backend run blog:publish --",
     "media:import": "npm --prefix backend run media:import --"

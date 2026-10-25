@@ -1,6 +1,4 @@
 import {prepareCatalog} from '../services/prepareCatalog.js';
-import {setTestStock} from '../services/testStock.js';
-import {publishAllProducts} from '../services/publishAllProducts.js';
 import {Router} from 'express';
 import multer from 'multer';
 import {getPool} from '../config/db.js';
@@ -26,9 +24,7 @@ export function catalogRoutes(config){const router=Router();
  router.post('/categories',admin,async(req,res)=>{const data=validate(categorySchema,req.body);await verifyUploadedUrls([data.image],'image');res.status(201).json(await repo().saveCategory(data));});
  router.put('/categories/:id',admin,async(req,res)=>{const data=validate(categorySchema,req.body);await verifyUploadedUrls([data.image],'image');res.json(await repo().saveCategory(data,validateId(req.params.id)));});
  router.delete('/categories/:id',admin,async(req,res)=>{await repo().archiveCategory(validateId(req.params.id));res.status(204).end();});
- router.post('/admin/products/prepare',admin,async(req,res)=>res.json(await prepareCatalog(getPool(config.databaseUrl))));
- router.post('/admin/products/test-stock',admin,async(req,res)=>res.json(await setTestStock(getPool(config.databaseUrl))));
- router.post('/admin/products/publish',admin,async(req,res)=>res.json(await publishAllProducts(getPool(config.databaseUrl))));
+ router.post('/admin/products/classify',admin,async(req,res)=>res.json(await prepareCatalog(getPool(config.databaseUrl))));
  router.post('/products',admin,async(req,res)=>{const data=validate(productSchema,req.body);await verifyUploadedUrls(data.images,'image');res.status(201).json(await repo().saveProduct(data));});
  router.put('/products/:id/line',admin,async(req,res)=>{const {audience}=validate(audienceSchema,req.body);res.json(await repo().saveAudience(validateId(req.params.id),audience));});
  router.put('/products/:id',admin,async(req,res)=>{const data=validate(productSchema,req.body);await verifyUploadedUrls(data.images,'image');res.json(await repo().saveProduct(data,validateId(req.params.id)));});

@@ -1,3 +1,3 @@
-import AuthForm from '@/components/AuthForm';
+import AuthForm from '@/components/AuthForm/AuthForm';
 export const metadata={title:'Вхід'};
 export default function Login(){return <AuthForm mode="login" />;}
